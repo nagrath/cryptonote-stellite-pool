@@ -115,7 +115,6 @@
         "sslCert": "./cert.pem",
         "sslKey": "./privkey.pem",
         "sslCA": "./chain.pem",
-        "bindIpSSL":"127.0.0.1",
         "trustProxyIP": false
     },
 
@@ -133,7 +132,8 @@
         "host": "127.0.0.1",
         "port": 6379,
         "auth": null,
-	    "db": 0
+	"cleanupInterval":15,  
+	"db": 0
     },
 
     "email": {
