@@ -11,3 +11,7 @@ var blockchainExplorer = "https://explorer.stellite.cash/search?value={id}";
 var transactionExplorer = "https://explorer.stellite.cash/search?value={id}";
 
 var themeCss = "themes/stellite.css";
+
+
+var langs = { 'en': 'English', 'fr': 'Français', 'ca': 'Català' };
+var defaultLang = 'en';
