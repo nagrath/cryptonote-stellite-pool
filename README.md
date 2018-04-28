@@ -388,6 +388,12 @@ Explanation for each field:
         "domain": "mg.yourdomain" // Your MailGun domain
     }
 },
+/* Telegram Notifications */
+"telegram":{
+    "enabled":false,
+    "token":"your_telegram_token",
+    "channel":"your_telegram_channel",
+},
     
 /* Monitoring RPC services. Statistics will be displayed in Admin panel */
 "monitoring": {
