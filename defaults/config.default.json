@@ -20,7 +20,7 @@
         "enabled": true,
         "clusterForks": "auto",
         "poolAddress": "Se2WEgKarYw84Cc4JDY86t5HB42kKmvRd1ncLDcdkBYc1y3JEEmWVFrjDNJvcxEKVhXvWurnav1TJZB1XH4mxBuS34cU6nhvv",
-        "blockRefreshInterval": 1000,
+        "blockRefreshInterval": 600,
         "minerTimeout": 900,
         "sslCert": "./cert.pem",
         "sslKey": "./privkey.pem",
@@ -33,13 +33,23 @@
             },
             {
                 "port": 4444,
-                "difficulty": 20000,
-                "desc": "Mid range hardware (~ 500H/s) diff: 20000"
+                "difficulty": 40000,
+                "desc": "Medium end hardware (~ 1000H/s) diff: 40000"
             },
-             {
+            {
                 "port": 5555,
-                "difficulty": 100000,
-                "desc": "High end hardware (> 2.5kH/s) dif: 10000"
+                "difficulty": 80000,
+                "desc": "High end hardware (~ 2000H/s) diff: 80000"
+            },
+            {
+                "port": 6666,
+                "difficulty": 200000,
+                "desc": "Low end rigs (~ 5000H/s) diff: 200000"
+            },
+            {
+                "port": 7777,
+                "difficulty": 400000,
+                "desc": "High end rigs (~ 10000H/s) diff: 400000"
             }
         ],
         "varDiff": {
@@ -67,8 +77,8 @@
         },
         "banning": {
             "enabled": true,
-            "time": 600,
-            "invalidPercent": 25,
+            "time": 30,
+            "invalidPercent": 50,
             "checkThreshold": 30
         },
         "slushMining": {
@@ -80,7 +90,7 @@
     },
 
     "payments": {
-        "enabled": true,
+        "enabled": false,
         "interval": 900,
         "maxAddresses": 10,
         "mixin": 1,
@@ -97,19 +107,19 @@
         "enabled": true,
         "interval": 30,
         "depth": 18,
-        "poolFee": 0.8,
-        "devDonation": 0.2
+        "poolFee": 0.4,
+        "devDonation": 0.1
     },
 
     "api": {
         "enabled": true,
         "hashrateWindow": 600,
         "updateInterval": 5,
-        "port": 8117,
+        "port": "8117",
+	"bindIp":"127.0.0.1",
         "blocks": 30,
         "payments": 30,
-        "password": "your_password_here",
-        "bindIp":"127.0.0.1",
+        "password": "password",
         "ssl": false,
         "sslPort": 2889,
         "sslCert": "./cert.pem",
@@ -125,17 +135,16 @@
 
     "wallet": {
         "host": "127.0.0.1",
-        "port": 18081
+        "port": 8082
     },
 
     "redis": {
         "host": "127.0.0.1",
         "port": 6379,
         "auth": null,
-	"cleanupInterval":15,  
-	"db": 0
+	    "db":0
     },
-
+ 
     "email": {
         "enabled": false,
         "templateDir": "email_templates",
@@ -162,7 +171,11 @@
             "domain": "mg.yourdomain"
         }
     },
-    
+    "telegram":{
+        "enabled":false,
+        "token":"your_telegram_token",
+        "channel":"your_telegram_channel",
+    },
     "monitoring": {
         "daemon": {
             "checkInterval": 60,
