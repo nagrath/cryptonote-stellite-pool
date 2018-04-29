@@ -8,7 +8,11 @@ require('./lib/configReader.js');
 
 require('./lib/logger.js');
 
-global.redisClient = redis.createClient(config.redis.port, config.redis.host, {auth_pass: config.redis.auth,db:config.redis.db});
+var logSystem = 'master';
+
+require('./lib/exceptionWriter.js')(logSystem);
+
+global.redisClient = redis.createClient(config.redis.port, config.redis.host, {auth_pass: global.config.redis.auth,db:global.config.redis.db});
 
 if (cluster.isWorker){
     switch(process.env.workerType){
@@ -35,30 +39,25 @@ if (cluster.isWorker){
     return;
 }
 
-var logSystem = 'master';
-require('./lib/exceptionWriter.js')(logSystem);
-
-
-var singleModule = (function(){
-
-    var validModules = ['pool', 'api', 'unlocker', 'payments', 'chartsDataCollector'];
-
-    for (var i = 0; i < process.argv.length; i++){
-        if (process.argv[i].indexOf('-module=') === 0){
-            var moduleName = process.argv[i].split('=')[1];
-            if (validModules.indexOf(moduleName) > -1)
-                return moduleName;
-
-            log('error', logSystem, 'Invalid module "%s", valid modules: %s', [moduleName, validModules.join(', ')]);
-            process.exit();
-        }
-    }
-})();
-
 
 (function init(){
 
     checkRedisVersion(function(){
+        var singleModule = (function(){
+
+            var validModules = ['pool', 'api', 'unlocker', 'payments', 'chartsDataCollector'];
+
+            for (var i = 0; i < process.argv.length; i++){
+                if (process.argv[i].indexOf('-module=') === 0){
+                    var moduleName = process.argv[i].split('=')[1];
+                    if (validModules.indexOf(moduleName) > -1)
+                        return moduleName;
+
+                    log('error', logSystem, 'Invalid module "%s", valid modules: %s', [moduleName, validModules.join(', ')]);
+                    process.exit();
+                }
+            }
+        })();
 
         if (singleModule){
             log('info', logSystem, 'Running in single module mode: %s', [singleModule]);
@@ -97,7 +96,7 @@ var singleModule = (function(){
 
 function checkRedisVersion(callback){
 
-    redisClient.info(function(error, response){
+    global.redisClient.info(function(error, response){
         if (error){
             log('error', logSystem, 'Redis version check failed');
             return;
@@ -105,6 +104,7 @@ function checkRedisVersion(callback){
         var parts = response.split('\r\n');
         var version;
         var versionString;
+
         for (var i = 0; i < parts.length; i++){
             if (parts[i].indexOf(':') !== -1){
                 var valParts = parts[i].split(':');
@@ -115,6 +115,7 @@ function checkRedisVersion(callback){
                 }
             }
         }
+
         if (!version){
             log('error', logSystem, 'Could not detect redis version - must be super old or broken');
             return;
@@ -129,22 +130,17 @@ function checkRedisVersion(callback){
 
 function spawnPoolWorkers(){
 
-    if (!config.poolServer || !config.poolServer.enabled || !config.poolServer.ports || config.poolServer.ports.length === 0) return;
+    if (!global.config.poolServer || !global.config.poolServer.enabled || !global.config.poolServer.ports || global.config.poolServer.ports.length === 0) return;
 
-    if (config.poolServer.ports.length === 0){
+    if (global.config.poolServer.ports.length === 0){
         log('error', logSystem, 'Pool server enabled but no ports specified');
         return;
     }
 
-
     var numForks = (function(){
-        if (!config.poolServer.clusterForks)
-            return 1;
-        if (config.poolServer.clusterForks === 'auto')
+        if (!global.config.poolServer.clusterForks || global.config.poolServer.clusterForks === 'auto' || isNaN(global.config.poolServer.clusterForks))
             return os.cpus().length;
-        if (isNaN(config.poolServer.clusterForks))
-            return 1;
-        return config.poolServer.clusterForks;
+        return global.config.poolServer.clusterForks;
     })();
 
     var poolWorkers = {};
@@ -158,7 +154,7 @@ function spawnPoolWorkers(){
         worker.type = 'pool';
         poolWorkers[forkId] = worker;
         worker.on('exit', function(code, signal){
-            log('error', logSystem, 'Pool fork %s died, spawning replacement worker...', [forkId]);
+            log('error', logSystem, 'Pool fork %s died, spawning replacement worker.', [forkId]);
             setTimeout(function(){
                 createPoolWorker(forkId);
             }, 2000);
@@ -188,13 +184,13 @@ function spawnPoolWorkers(){
 
 function spawnBlockUnlocker(){
 
-    if (!config.blockUnlocker || !config.blockUnlocker.enabled) return;
+    if (!global.config.blockUnlocker || !global.config.blockUnlocker.enabled) return;
 
     var worker = cluster.fork({
         workerType: 'blockUnlocker'
     });
     worker.on('exit', function(code, signal){
-        log('error', logSystem, 'Block unlocker died, spawning replacement...');
+        log('error', logSystem, 'Block unlocker died, spawning replacement.');
         setTimeout(function(){
             spawnBlockUnlocker();
         }, 2000);
@@ -204,13 +200,13 @@ function spawnBlockUnlocker(){
 
 function spawnPaymentProcessor(){
 
-    if (!config.payments || !config.payments.enabled) return;
+    if (!global.config.payments || !global.config.payments.enabled) return;
 
     var worker = cluster.fork({
         workerType: 'paymentProcessor'
     });
     worker.on('exit', function(code, signal){
-        log('error', logSystem, 'Payment processor died, spawning replacement...');
+        log('error', logSystem, 'Payment processor died, spawning replacement.');
         setTimeout(function(){
             spawnPaymentProcessor();
         }, 2000);
@@ -218,13 +214,14 @@ function spawnPaymentProcessor(){
 }
 
 function spawnApi(){
-    if (!config.api || !config.api.enabled) return;
+    if (!global.config.api || !global.config.api.enabled) return;
 
     var worker = cluster.fork({
         workerType: 'api'
     });
+
     worker.on('exit', function(code, signal){
-        log('error', logSystem, 'API died, spawning replacement...');
+        log('error', logSystem, 'API died, spawning replacement.');
         setTimeout(function(){
             spawnApi();
         }, 2000);
@@ -236,7 +233,7 @@ function spawnCli(){
 }
 
 function spawnChartsDataCollector(){
-    if (!config.charts) return;
+    if (!global.config.charts) return;
 
     var worker = cluster.fork({
         workerType: 'chartsDataCollector'
