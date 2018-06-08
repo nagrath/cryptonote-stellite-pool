@@ -19,37 +19,32 @@
     "poolServer": {
         "enabled": true,
         "clusterForks": "auto",
-        "poolAddress": "Se2WEgKarYw84Cc4JDY86t5HB42kKmvRd1ncLDcdkBYc1y3JEEmWVFrjDNJvcxEKVhXvWurnav1TJZB1XH4mxBuS34cU6nhvv",
-        "blockRefreshInterval": 600,
+        "poolAddress": "Se48Y3rP4Q7iyTU1Gvj7uRFt9tQWgjNCqFArHPPj6wFharsZvW1pSaj5EemuiaQWdP79FKzx1ZT3V6ii3Puuz5wo37Fo4Rpeg",
+        "blockRefreshInterval": 200,
         "minerTimeout": 900,
         "sslCert": "./cert.pem",
         "sslKey": "./privkey.pem",
         "sslCA": "./chain.pem",
         "ports": [
             {
-                "port": 3333,
-                "difficulty": 4000,
-                "desc": "Low end hardware (1 ~ 100H/s) diff: 4000"
+                "port": 3933,
+                "difficulty": 2000,
+                "desc": "Low end hardware (50 ~ 100H/s) diff: 2000"
             },
             {
-                "port": 4444,
-                "difficulty": 40000,
-                "desc": "Medium end hardware (~ 1000H/s) diff: 40000"
+                "port": 4944,
+                "difficulty": 20000,
+                "desc": "Mid range hardware (~ 500H/s) diff: 20000"
             },
-            {
-                "port": 5555,
-                "difficulty": 80000,
-                "desc": "High end hardware (~ 2000H/s) diff: 80000"
+             {
+                "port": 5955,
+                "difficulty": 100000,
+                "desc": "High end hardware (> 2.5kH/s) dif: 100000"
             },
-            {
-                "port": 6666,
-                "difficulty": 200000,
-                "desc": "Low end rigs (~ 5000H/s) diff: 200000"
-            },
-            {
-                "port": 7777,
-                "difficulty": 400000,
-                "desc": "High end rigs (~ 10000H/s) diff: 400000"
+           {
+                "port": 8988,
+                "difficulty": 50,
+                "desc": "Web mining or mobiles (1 ~ 50H/s) dif: 50"
             }
         ],
         "varDiff": {
@@ -98,7 +93,7 @@
         "transferFee": 10,
         "dynamicTransferFee": true,
         "minerPayFee" : true,
-        "minPayment": 10000,
+        "minPayment": 1000,
         "maxTransactionAmount": 1000000,
         "denomination": 100
     },
@@ -107,15 +102,15 @@
         "enabled": true,
         "interval": 30,
         "depth": 18,
-        "poolFee": 0.4,
-        "devDonation": 0.1
+        "poolFee": 1,
+        "devDonation": 0
     },
 
     "api": {
         "enabled": true,
         "hashrateWindow": 600,
         "updateInterval": 5,
-        "port": "8117",
+        "port": "8917",
 	"bindIp":"127.0.0.1",
         "blocks": 30,
         "payments": 30,
@@ -135,7 +130,7 @@
 
     "wallet": {
         "host": "127.0.0.1",
-        "port": 8082
+        "port": 18982
     },
 
     "redis": {
