@@ -496,7 +496,7 @@ Variable explanations:
 ```javascript
 
 /* Must point to the API setup in your config.json file. */
-var api = "http://poolhost:8117";
+var api = "http://poolhost:8917";
 
 /* Pool server host to instruct your miners to point to.  */
 var poolHost = "poolhost.com";
@@ -624,7 +624,7 @@ Credits
 * [dvandal/cryptonote-nodejs-pool](//github.com/dvandal/cryptonote-nodejs-pool)
 * [cryptoknight.cc](//cryptoknight.cc)
 * [fairhash.org](//fairhash.org)
-* [ahmyi/cryptonote-stellite-pool] (//github.com/ahmyi/cryptonote-stellite-pool)
+* [ahmyi/cryptonote-stellite-pool](//github.com/ahmyi/cryptonote-stellite-pool)
 
 License
 -------
