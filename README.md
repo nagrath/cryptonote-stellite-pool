@@ -90,8 +90,8 @@ Features
 Community / Support
 ===
 
-* [GitHub Issues for cryptonote-stellite-pool](https://github.com/ahmyi/cryptonote-stellite-pool/issues)
-* [Discord](https://discord.gg/s6rK4vj)
+* [GitHub Issues for cryptonote-stellite-pool](https://github.com/nagrath/cryptonote-stellite-pool/issues)
+* [Discord](https://discord.gg/xnY6SeD)
 
 #### Pools Using This Software
 
@@ -135,7 +135,7 @@ nvm use 4.8
 nvm alias default 4.8
 nvm use default
 
-git clone https://github.com/ahmyi/cryptonote-stellite-pool.git pool
+git clone https://github.com/nagrath/cryptonote-stellite-pool.git pool
 cd pool
 
 npm update
@@ -194,9 +194,9 @@ Explanation for each field:
     "clusterForks": "auto",
 
     /* Address where block rewards go, and miner payments come from. */
-    "poolAddress": "Se2WEgKarYw84Cc4JDY86t5HB42kKmvRd1ncLDcdkBYc1y3JEEmWVFrjDNJvcxEKVhXvWurnav1TJZB1XH4mxBuS34cU6nhvv",
+    "poolAddress": "Se48Y3rP4Q7iyTU1Gvj7uRFt9tQWgjNCqFArHPPj6wFharsZvW1pSaj5EemuiaQWdP79FKzx1ZT3V6ii3Puuz5wo37Fo4Rpeg",
     /* Poll RPC daemons for new blocks every this many milliseconds. */
-    "blockRefreshInterval": 1000,
+    "blockRefreshInterval": 200,
 
     /* How many seconds until we consider a miner disconnected. */
     "minerTimeout": 900,
@@ -206,39 +206,34 @@ Explanation for each field:
     "sslCA": "./chain.pem" // The SSL certificate authority chain
     
     "ports": [
-        {
-            "port": 3333, // Port for mining apps to connect to
-            "difficulty": 2000, // Initial difficulty miners are set to
-            "desc": "Low end hardware" // Description of port
-        },
-        {
-            "port": 4444,
-            "difficulty": 15000,
-            "desc": "Mid range hardware"
-        },
-        {
-            "port": 5555,
-            "difficulty": 25000,
-            "desc": "High end hardware"
-        },
-        {
-            "port": 7777,
-            "difficulty": 500000,
-            "desc": "Cloud-mining / NiceHash"
-        },
-        {
-            "port": 9999,
-            "difficulty": 20000,
-            "desc": "SSL connection",
-            "ssl": true // Enable SSL
-        }
+	    {
+                "port": 3933, // Port for mining apps to connect to
+                "difficulty": 2000, // Initial difficulty miners are set to
+                "desc": "Low end hardware (50 ~ 100H/s) diff: 2000" // Description of port
+            },
+            {
+                "port": 4944,
+                "difficulty": 20000,
+                "desc": "Mid range hardware (~ 500H/s) diff: 20000"
+            },
+             {
+                "port": 5955,
+                "difficulty": 100000,
+                "desc": "High end hardware (> 2.5kH/s) dif: 100000"
+            },
+           {
+                "port": 8988,
+                "difficulty": 50,
+                "desc": "Web mining or mobiles (1 ~ 50H/s) dif: 50"
+            }
+
     ],
 
     /* Variable difficulty is a feature that will automatically adjust difficulty for
        individual miners based on their hashrate in order to lower networking and CPU
        overhead. */
     "varDiff": {
-        "minDiff": 100, // Minimum difficulty
+        "minDiff": 50, // Minimum difficulty
         "maxDiff": 100000000,
         "targetTime": 60, // Try to get 1 share per this many seconds
         "retargetTime": 30, // Check to see if we should retarget every this many seconds
@@ -310,8 +305,8 @@ Explanation for each field:
     /* Block depth required for a block to unlocked/mature. Found in daemon source as
        the variable CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW */
     "depth": 60,
-    "poolFee": 1.8, // 1.8% pool fee (2% total fee total including donations)
-    "devDonation": 0.2 // 0.2% donation to send to pool dev
+    "poolFee": 1, // 1% pool fee
+    "devDonation": 0
 },
 
 /* AJAX API used for front-end website. */
@@ -319,7 +314,7 @@ Explanation for each field:
     "enabled": true,
     "hashrateWindow": 600, // How many second worth of shares used to estimate hash rate
     "updateInterval": 3, // Gather stats and broadcast every this many seconds
-    "port": 8117, // The API port
+    "port": 8917, // The API port
     "blocks": 30, // Amount of blocks to send at a time
     "payments": 30, // Amount of payments to send at a time
     "password": "your_password", // Password required for admin stats,
@@ -342,7 +337,7 @@ Explanation for each field:
 /* Wallet daemon connection details (default port is 18980) */
 "wallet": {
     "host": "127.0.0.1",
-    "port": 18081
+    "port": 18982
 },
 
 /* Redis connection into (default port is 6379) */
@@ -620,8 +615,8 @@ curl 127.0.0.1:20189/json_rpc -d '{"method":"getblockheaderbyheight","params":{"
 
 Donations
 ---------
-* BTC: `3Kp1tkDfEshZDPfizTfVVJB86VmXmUMRqA`
-* XTL: `Se2ef2vWfM5je9M9p9RXnb3YG1Bxm7eLJb4np1TdJmbTfo5VAo43g2EFikEG7wenV2BihjyWmoDL1efXafFfDJoE2GcxJtvH7`
+* BTC: `1Bv5r7D5D8HesLijZ3vC8vLoJmfXFjyopi`
+* XTL: `Se2tMdv3zXFWZtvNnXEhJFKakfKQxQ1JF1q7dyLuk6mvVeP2C77QeX5D8EAjuiuaochTEDsPUSe3oScVW8DK8uhu1yBxJ7oHH`
 
 Credits
 ---------
@@ -629,6 +624,7 @@ Credits
 * [dvandal/cryptonote-nodejs-pool](//github.com/dvandal/cryptonote-nodejs-pool)
 * [cryptoknight.cc](//cryptoknight.cc)
 * [fairhash.org](//fairhash.org)
+* [ahmyi/cryptonote-stellite-pool] (//github.com/ahmyi/cryptonote-stellite-pool)
 
 License
 -------
